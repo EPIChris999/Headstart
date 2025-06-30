@@ -16,8 +16,8 @@
     "url": "https://github.com/EPIChris999/Headstart/issues"
   },
   "homepage": "https://github.com/EPIChris999/Headstart#readme",
-  "description": "",
   "dependencies": {
     "node-fetch": "^2.7.0"
-  }
+  },
+  "description": ""
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Our Services</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+  </nav>
+
+  <main>
+    <h2>Find Opportunities</h2>
+    <p>Type what kind of internship, shadowing, or opportunity you’re looking for:</p>
+    <input
+      type="text"
+      id="userInput"
+      placeholder="e.g., Marketing internship"
+      style="width: 100%; padding: 8px; margin-bottom: 10px;"
+    />
+    <button id="askAI" style="padding: 8px 16px;">Get Suggestions</button>
+
+    <div
+      id="aiResponse"
+      style="margin-top: 20px; white-space: pre-wrap; background: #f0f0f0; padding: 15px; border-radius: 5px;"
+    ></div>
+  </main>
+
+  <script>
+    const button = document.getElementById('askAI');
+    const responseDiv = document.getElementById('aiResponse');
+
+    button.onclick = async () => {
+      const input = document.getElementById('userInput').value.trim();
+      if (!input) {
+        alert('Please enter your query.');
+        return;
+      }
+
+      responseDiv.textContent = 'Thinking...';
+
+      try {
+        const res = await fetch('/.netlify/functions/gemini', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prompt: input })
+        });
+
+        if (!res.ok) {
+          throw new Error('Gemini API error');
+        }
+
+        const data = await res.json();
+        const reply = data.reply || 'No suggestions found.';
+        responseDiv.textContent = reply;
+      } catch (error) {
+        responseDiv.textContent = 'Error fetching AI response. Please try again later.';
+        console.error(error);
+      }
+    };
+  </script>
+
+</body>
+</html>
+
